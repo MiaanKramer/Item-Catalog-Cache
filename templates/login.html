@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block head %}
+
+<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- SIGN INTO GOOGLE-->
+<div class="container">
+
+    <div class="row login-box">
+
+        <div class="col-md-12">
+
+            <div id="signIn">
+
+                <span class="g-signin"
+                    data-scope="openid email"
+                    data-clientid="{{client_id}}"
+                    data-redirecturi="postmessage"
+                    data-accesstype="offline"
+                    data-cookiepolicy="single_host_origin"
+                    data-callback="signInCallback"
+                    data-approvalprompt="force">
+                </span>
+
+            </div>
+
+            <div id="result"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    function signInCallback(result) {
+
+        if (result['code']) {
+
+            // Hide when authorized
+
+            $('#signIn').attr('style', 'display: none');
+
+            // Send one time use code to server, when the server responds log successful login and then redirect to main item catalog page
+
+            $.ajax({
+                type: 'POST',
+                url: '/gconnect?state={{STATE}}',
+                processData: false,
+                data: result['code'],
+                contentType: 'application/octet-stream; charset=utf-8',
+                success: function (result) {
+
+                    // Handle/Verify server response
+                    if (result) {
+
+                        $('#result').html(result)
+                        setTimeout(function () {
+                            window.location.href = "/";
+                        }, 3000);
+
+                    } else if (result['error']) {
+
+                        console.log('An error occurred: ' + result['error']);
+
+                    } else {
+
+                        $('#result').html('Failed to make server call. Make sure your configuration and console are setup correctly');
+
+                    }
+                }
+            });
+        }
+
+    }
+
+</script>
+
+{% endblock %}

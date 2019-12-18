@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}Edit Category{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="row" style="margin-top: 35px;">
+
+        <div class="col-md-7">
+
+            <h1>Edit {{ category.name }}</h1>
+
+            <form name="new-category" method="POST">
+
+                <!-- Name -->
+                <div class="form-group">
+                    <input name="name" type="text" class="form-control" required>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save text-and-icon"></i>
+                    Submit
+                </button>
+
+                <!-- Cancel/Back -->
+                <a class="btn btn-danger" href="{{ url_for('home') }}">
+                    <i class="fas fa-times text-and-icon"></i>
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
